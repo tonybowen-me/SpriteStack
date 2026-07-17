@@ -41,6 +41,7 @@ function MainGame() {
       <PhaserGame
         restoredTiles={restoredTiles}
         raidUnlocked={progress.raidUnlocked}
+        inputEnabled={overlay === null && quest === undefined}
         onOpenQuest={openQuest}
       />
 

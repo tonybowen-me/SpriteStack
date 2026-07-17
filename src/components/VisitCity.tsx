@@ -35,6 +35,7 @@ export function VisitCity({ token }: { token: string }) {
         restoredTiles={[...progress.restoredTiles]}
         raidUnlocked={progress.raidUnlocked}
         visit
+        inputEnabled={!showBoard && questId === null}
         onOpenQuest={(id) => setQuestId(id)}
       />
 

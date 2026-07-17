@@ -94,6 +94,9 @@ export class WorldScene extends Phaser.Scene {
     }
     kb.on('keydown-SPACE', () => this.tryInteract())
     kb.on('keydown-E', () => this.tryInteract())
+    // Don't preventDefault on movement/interact keys — otherwise React overlay
+    // inputs (e.g. the Workbench textarea) can't receive SPACE / W / A / S / D.
+    kb.clearCaptures()
 
     this.prompt = this.add
       .text(0, 0, '', {
@@ -213,6 +216,14 @@ export class WorldScene extends Phaser.Scene {
     return c
   }
 
+  // Toggle world input off while a React overlay (Workbench / board) is open,
+  // so keystrokes go to the DOM and interact keys don't switch quests.
+  setInputEnabled(enabled: boolean) {
+    const kb = this.input?.keyboard
+    if (kb) kb.enabled = enabled
+    if (!enabled && this.playerBody) this.playerBody.setVelocity(0)
+  }
+
   updateRestored(restored: string[], raidUnlocked: boolean) {
     this.restored = new Set(restored)
     this.raidUnlocked = raidUnlocked
@@ -231,15 +242,18 @@ export class WorldScene extends Phaser.Scene {
   }
 
   private tryInteract() {
+    const el = document.activeElement
+    if (el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) return
     if (this.nearest) {
       this.game.events.emit(WORLD_EVENTS.openQuest, this.nearest.quest.id)
     }
   }
 
   update() {
-    const speed = 220
     const body = this.playerBody
     body.setVelocity(0)
+    if (!this.input?.keyboard?.enabled) return
+    const speed = 220
     const left = this.cursors.left.isDown || this.wasd.left.isDown
     const right = this.cursors.right.isDown || this.wasd.right.isDown
     const up = this.cursors.up.isDown || this.wasd.up.isDown

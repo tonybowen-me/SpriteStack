@@ -6,10 +6,11 @@ interface PhaserGameProps {
   restoredTiles: string[]
   raidUnlocked: boolean
   visit?: boolean
+  inputEnabled: boolean
   onOpenQuest: (questId: string) => void
 }
 
-export function PhaserGame({ restoredTiles, raidUnlocked, visit, onOpenQuest }: PhaserGameProps) {
+export function PhaserGame({ restoredTiles, raidUnlocked, visit, inputEnabled, onOpenQuest }: PhaserGameProps) {
   const parentRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Phaser.Game | null>(null)
   const sceneRef = useRef<WorldScene | null>(null)
@@ -55,6 +56,12 @@ export function PhaserGame({ restoredTiles, raidUnlocked, visit, onOpenQuest }: 
       scene.updateRestored(restoredTiles, raidUnlocked)
     }
   }, [restoredTiles, raidUnlocked])
+
+  // Hand keyboard focus to the DOM while an overlay is open.
+  useEffect(() => {
+    const scene = sceneRef.current
+    if (scene?.scene?.isActive?.()) scene.setInputEnabled(inputEnabled)
+  }, [inputEnabled])
 
   return <div ref={parentRef} className="h-full w-full" />
 }
