@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-pixel: 'Courier New', ui-monospace, monospace;
+
+  --color-stack-bg: #0d0b1a;
+  --color-stack-panel: #171233;
+  --color-stack-panel-2: #201a45;
+  --color-stack-line: #362c66;
+  --color-stack-ai: #6ee7ff;
+  --color-stack-infra: #ffcf5c;
+  --color-stack-good: #7cf29c;
+  --color-stack-bad: #ff6b81;
+  --color-stack-text: #e7e3ff;
+  --color-stack-muted: #9a92c8;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-stack-bg);
+  color: var(--color-stack-text);
+  font-family: var(--font-pixel);
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+canvas {
+  image-rendering: pixelated;
+}
+
+.pixel-border {
+  box-shadow:
+    0 0 0 2px var(--color-stack-line),
+    0 0 0 4px var(--color-stack-bg);
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.08) 3px
+  );
+}

@@ -174,3 +174,47 @@ Sandbox capabilities dictate what’s “real” in quest briefs. If cloud lab i
 
 Done means complete product
 Not a vertical slice of “one quest in a grey box.” Season 0 MVP = 8-bit District Alpha + 24 senior-calibrated quests across AI/MCP/ cloud/architecture (+2 advanced SWE) + graders + restore fantasy + shareable city. If any pillar is missing, delay ship.
+
+---
+
+## Development (Season 0 MVP build)
+
+This repo contains a runnable slice of the Season 0 product: an 8-bit District
+Alpha you walk, all 24 senior-calibrated quests across Tracks A–E (plus the raid
+boss), per-sandbox graders, event-sourced restore progress, and shareable
+read-only cities.
+
+### Stack
+- **Vite + React 19 + TypeScript** — app shell / Workbench UI
+- **Phaser 3** — the District Alpha world canvas (avatar, collision, tile restore)
+- **Tailwind CSS v4** — pixel-adjacent chrome
+
+### Run it
+```bash
+nvm use            # Node 22 (see .nvmrc); tooling requires >= 20.19
+npm install
+npm run dev        # http://localhost:5173
+```
+
+### Scripts
+- `npm run dev` — dev server
+- `npm run build` — typecheck (`tsc -b`) + production build
+- `npm run lint` — oxlint
+- `npm run preview` — preview the production build
+
+### Where things live
+| Area | Path |
+| --- | --- |
+| Quest DSL (types) | `src/quests/dsl.ts` |
+| 24-quest catalog + raid | `src/quests/catalog.ts` |
+| Graders (coding / mcp / cloud / architecture) | `src/quests/graders.ts` |
+| Event-sourced store + progress | `src/state/` |
+| Phaser world | `src/game/` |
+| Workbench / Quest Board / Blueprints / Share | `src/components/` |
+| Shareable city encoding + visit mode | `src/share/` |
+
+### MVP scope notes
+Auth is a local handle (OAuth + email planned). Sandboxes grade submissions
+client-side (structure/rubric checks) rather than in real containers/cloud;
+progress persists to `localStorage`. These are the seams to grow into the full
+platform described above.
